@@ -81,7 +81,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "http://api.movies.collection.nomoredomains.sbs",
+  url: "https://api.movies.collection.nomoredomains.sbs",
 });
 
 export default api;

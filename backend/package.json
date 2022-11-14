@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/StanislavBarsukov/movies-explorer-api.git"
+    "url": "git+https://github.com/StanislavBarsukov/movies.git"
   },
   "keywords": [],
   "author": "Stanislav",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/StanislavBarsukov/movies-explorer-api/issues"
+    "url": "https://github.com/StanislavBarsukov/movies/issues"
   },
-  "homepage": "https://github.com/StanislavBarsukov/movies-explorer-api#readme",
+  "homepage": "https://github.com/StanislavBarsukov/movies#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "celebrate": "^15.0.1",

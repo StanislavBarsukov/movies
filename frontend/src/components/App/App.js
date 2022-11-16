@@ -60,10 +60,9 @@ function App() {
           setCurrentUser(user.user);
         })
         .catch((err) => {
+          handleLogout()
           console.log(`Ошибка: ${err}`);
         });
-    } else {
-      handleLogout()
     }
   }, [loggedIn]);
 

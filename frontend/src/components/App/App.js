@@ -62,6 +62,8 @@ function App() {
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
         });
+    } else {
+      handleLogout()
     }
   }, [loggedIn]);
 

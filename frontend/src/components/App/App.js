@@ -66,23 +66,25 @@ function App() {
   }, [loggedIn]);
 
   React.useEffect(() => {
-    const moviesSaves = localStorage.getItem('moviesSave');
-        if (!moviesSaves?.movie) {
-          api.getMoviesSave()
-            .then((data) => {
-              localStorage.setItem('moviesSave', JSON.stringify(data));
-              setMoviesSave(data.movie.reverse());
-              if (checkedSave) {
-                setMoviesSaveShort(handleShortMovie(data.movie))
-              }
-            })
-            .catch((err) => {
-              console.log(`Ошибка: ${err}`);
-            });
-        } else {
-          setMoviesSave(JSON.parse(moviesSaves));
-        }
-  }, [location, checkedSave]);
+    if (loggedIn) {
+      const moviesSaves = localStorage.getItem('moviesSave');
+      if (!moviesSaves?.movie) {
+        api.getMoviesSave()
+          .then((data) => {
+            localStorage.setItem('moviesSave', JSON.stringify(data));
+            setMoviesSave(data.movie.reverse());
+            if (checkedSave) {
+              setMoviesSaveShort(handleShortMovie(data.movie))
+            }
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      } else {
+        setMoviesSave(JSON.parse(moviesSaves));
+      }
+    }
+  }, [location, checkedSave, loggedIn]);
 
   const handleTokenCheck = () => {
     const token = localStorage.getItem('token');
@@ -97,17 +99,7 @@ function App() {
         })
     }
     if (!token) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('moviesSave');
-      localStorage.removeItem('checkbox');
-      localStorage.removeItem('search');
-      localStorage.removeItem('movies');
-      setLoggedIn(false);
-      setMoviesSave([]);
-      setMovies([]);
-      setMoviesSearch([]);
-      setMoviesSaveShort([]);
-      navigate('/');
+      handleLogout();
     }
   };
 
@@ -212,6 +204,9 @@ function App() {
           setMoviesSave(newMovieSave);
         })
         .catch((err)=>{
+          if(err === 401) {
+            handleLogout()
+          }
           console.log(`Ошибка: ${err}`);
         })
   };
@@ -223,6 +218,9 @@ function App() {
         setMoviesSave(newMoviesList)
       })
       .catch((err) => {
+        if(err === 401) {
+          handleLogout()
+        }
         console.log(`Ошибка: ${err}`);
       })
   };

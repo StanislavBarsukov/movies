@@ -94,18 +94,20 @@ function App() {
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
-          localStorage.removeItem('token');
-          localStorage.removeItem('moviesSave');
-          localStorage.removeItem('checkbox');
-          localStorage.removeItem('search');
-          localStorage.removeItem('movies');
-          setLoggedIn(false);
-          setMoviesSave([]);
-          setMovies([]);
-          setMoviesSearch([]);
-          setMoviesSaveShort([]);
-          navigate('/');
         })
+    }
+    if (!token) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('moviesSave');
+      localStorage.removeItem('checkbox');
+      localStorage.removeItem('search');
+      localStorage.removeItem('movies');
+      setLoggedIn(false);
+      setMoviesSave([]);
+      setMovies([]);
+      setMoviesSearch([]);
+      setMoviesSaveShort([]);
+      navigate('/');
     }
   };
 

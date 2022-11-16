@@ -94,7 +94,11 @@ function App() {
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
-          localStorage.clear();
+          localStorage.removeItem('token');
+          localStorage.removeItem('moviesSave');
+          localStorage.removeItem('checkbox');
+          localStorage.removeItem('search');
+          localStorage.removeItem('movies');
           setLoggedIn(false);
           setMoviesSave([]);
           setMovies([]);

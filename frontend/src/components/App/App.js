@@ -60,7 +60,6 @@ function App() {
           setCurrentUser(user.user);
         })
         .catch((err) => {
-          handleLogout()
           console.log(`Ошибка: ${err}`);
         });
     }
@@ -95,6 +94,14 @@ function App() {
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
+        })
+        .finally(()=> {
+          localStorage.clear();
+          setLoggedIn(false);
+          setMoviesSave([]);
+          setMovies([]);
+          setMoviesSearch([]);
+          navigate('/');
         })
     }
   };

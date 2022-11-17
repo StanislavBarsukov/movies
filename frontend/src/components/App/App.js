@@ -3,7 +3,7 @@ import apiMovies from '../../utils/ApiMovies/ApiMovies';
 import api from '../../utils/Api/Api';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
-import  { Text_Error } from  '../../utils/const/const';
+import  { Text_Error, TimeFilm, Code } from  '../../utils/const/const';
 import * as auth from '../../utils/Auth/Auth';
 import './App.css';
 import Main from '../Landing/Main/Main';
@@ -14,7 +14,7 @@ import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Preloader from '../Preloader/Preloader';
+import CheckRoute from '../CheckRoute/CheckRoute';
 
 
 function App() {
@@ -92,7 +92,6 @@ function App() {
       auth.getContent(token)
         .then(() => {
           setLoggedIn(true);
-          navigate(location.pathname);
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
@@ -118,11 +117,11 @@ function App() {
         setIsSuccess(true);
       })
       .catch((err) => {
-        if(err === 400) {
+        if(err === Code.BadRequest) {
           setMessageErrorRegister(Text_Error.BadRequest);
-        } else if (err === 409) {
+        } else if (err === Code.Conflicting) {
           setMessageErrorRegister(Text_Error.Conflicting);
-        } else if (err === 500) {
+        } else if (err === Code.Server) {
           setMessageErrorRegister(Text_Error.ServerError);
         }
         console.log(`Некорректно заполнено одно из полей ${err}`);
@@ -138,9 +137,9 @@ function App() {
         localStorage.setItem('token', res.token);
       })
       .catch((err) => {
-        if(err === 400) {
+        if(err === Code.BadRequest) {
           setMessageErrorLogin(Text_Error.BadRequest);
-        } else if (err === 401) {
+        } else if (err === Code.Unauthorized) {
           setMessageErrorLogin(Text_Error.Unauthorized);
         }
         console.log(`Некорректно заполнено одно из полей ${err}`);
@@ -158,11 +157,11 @@ function App() {
         setIsSuccess(true);
       })
       .catch((err) => {
-        if(err === 400) {
+        if(err === Code.BadRequest) {
           setMessageErrorProfile(Text_Error.BadRequest);
-        } else if (err === 409) {
+        } else if (err === Code.Conflicting) {
           setMessageErrorProfile(Text_Error.Unauthorized_Email);
-        } else if (err === 500) {
+        } else if (err === Code.Server) {
           setMessageErrorProfile(Text_Error.ServerError);
         }
         console.log(`Некорректно заполнено одно из полей ${err}`);
@@ -204,7 +203,7 @@ function App() {
           setMoviesSave(newMovieSave);
         })
         .catch((err)=>{
-          if(err === 401) {
+          if(err === Code.Unauthorized) {
             handleLogout()
           }
           console.log(`Ошибка: ${err}`);
@@ -218,7 +217,7 @@ function App() {
         setMoviesSave(newMoviesList)
       })
       .catch((err) => {
-        if(err === 401) {
+        if(err === Code.Unauthorized) {
           handleLogout()
         }
         console.log(`Ошибка: ${err}`);
@@ -234,9 +233,6 @@ function App() {
       if (movieResult.length === 0 && name) {
         setMessageErrorSearch(Text_Error.Search);
         setMoviesSearch([]);
-        setTimeout(() => {
-          cleanError()
-        }, 3000);
       } else {
         setMoviesSearch(movieResult);
         cleanError();
@@ -255,9 +251,6 @@ function App() {
     if (movieResultSave.length === 0 && name) {
       setMessageErrorSearchSave(Text_Error.Search);
       setMoviesSave([]);
-      setTimeout(() => {
-        cleanError()
-      }, 3000);
     } else {
       setMoviesSave(movieResultSave);
       cleanError();
@@ -265,7 +258,7 @@ function App() {
   };
 
   const handleShortMovie = (movies) => {
-    return movies.filter((m)=> m.duration <= 40);
+    return movies.filter((m)=> m.duration <= TimeFilm.FortyMin);
   };
 
   const checkToggle = () => {
@@ -301,17 +294,16 @@ function App() {
       <div className="page">
         <Routes>
           <Route path="/sign-up" element={
-            loggedIn ? <ProtectedRoute/> :
-            <Register loggedIn={loggedIn} handleRegister={handleRegister} message={messageErrorRegister}/>
+            loggedIn ? <CheckRoute/> :
+            <Register handleRegister={handleRegister} message={messageErrorRegister}/>
           }/>
           <Route path="/sign-in" element={
-            loggedIn ? <ProtectedRoute/> :
-            <Login loggedIn={loggedIn} handleLogin={handleLogin} message={messageErrorLogin}/>
+            loggedIn ? <CheckRoute/> :
+            <Login handleLogin={handleLogin} message={messageErrorLogin}/>
           }/>
           <Route path="/" element={
             <Main loggedIn={loggedIn}/>
           }/>
-          <Route path="*" element={<NotFound/>}/>
           <Route path="/profile" element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Profile
@@ -356,6 +348,7 @@ function App() {
             </ProtectedRoute>
           }
           />
+          <Route path="*" element={<NotFound/>}/>
         </Routes>
       </div>
     </CurrentUserContext.Provider>

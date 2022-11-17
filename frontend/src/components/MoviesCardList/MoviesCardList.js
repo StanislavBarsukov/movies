@@ -3,11 +3,11 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useLocation } from 'react-router-dom';
 
-function MoviesCardList({ moviesAll, movies, onSave, onDelete, moviesSave, message }) {
+function MoviesCardList({ moviesAll, movies, onSave, onDelete, moviesSave, message, messageSave }) {
   const location = useLocation().pathname;
   return (
     <section className="movies">
-      { message ? ( <span className="movies__none">{message}</span> ) :(
+      { message || messageSave ? ( <span className="movies__none">{message || messageSave}</span> ) :(
         <ul className="movies__list">
           { location === '/movies' && (moviesAll.map((movie) => (
               <MoviesCard

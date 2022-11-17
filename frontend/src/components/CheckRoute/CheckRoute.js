@@ -4,7 +4,7 @@ const CheckRoute = ({ children }) => {
   const token = localStorage.getItem('token')
   if (token) {
     console.log(!token)
-    return <Navigate to="/"  replace/>;
+    return <Navigate to="/" />;
   }
   return children;
 };

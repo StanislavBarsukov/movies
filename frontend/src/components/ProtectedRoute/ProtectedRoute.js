@@ -1,8 +1,7 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, loggedIn }) => {
-  const location = useLocation().pathname;
-  return loggedIn ? children : <Navigate to={location} replace />;
+  return loggedIn ? children : <Navigate to={children} />;
 };
 
 export default ProtectedRoute;

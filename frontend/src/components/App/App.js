@@ -16,7 +16,6 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import CheckRoute from '../CheckRoute/CheckRoute';
 
-
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,9 +45,9 @@ function App() {
   React.useEffect(() => {
     const checkbox = localStorage.getItem('checkbox');
     setChecked(checkbox === 'true')
-      if (localStorage.getItem('search')) {
-        handleMovie(JSON.parse(localStorage.getItem('search')));
-      }
+    if (localStorage.getItem('search')) {
+      handleMovie(JSON.parse(localStorage.getItem('search')));
+    }
 
   }, [checked]);
 
@@ -147,7 +146,7 @@ function App() {
   };
 
   const handleUpdateUser = ({ email, name }) => {
-     return api.updateUser(email, name)
+    return api.updateUser(email, name)
       .then((res) => {
         setCurrentUser(res.user);
         setMessageErrorProfile(Text_Error.UpdateLog);
@@ -195,19 +194,19 @@ function App() {
   };
 
   const handleSaveMovie = (movie) => {
-      api.saveMovie(movie)
-        .then((res)=> {
-          const newMovieSave = [res.movie, ...moviesSave]
-          console.log(newMovieSave)
-          localStorage.setItem('moviesSave', JSON.stringify(newMovieSave));
-          setMoviesSave(newMovieSave);
-        })
-        .catch((err)=>{
-          if(err === Code.Unauthorized) {
-            handleLogout()
-          }
-          console.log(`Ошибка: ${err}`);
-        })
+    api.saveMovie(movie)
+      .then((res)=> {
+        const newMovieSave = [res.movie, ...moviesSave]
+        console.log(newMovieSave)
+        localStorage.setItem('moviesSave', JSON.stringify(newMovieSave));
+        setMoviesSave(newMovieSave);
+      })
+      .catch((err)=>{
+        if(err === Code.Unauthorized) {
+          handleLogout()
+        }
+        console.log(`Ошибка: ${err}`);
+      })
   };
 
   const handleDeleteMovie = (movie) => {
@@ -249,7 +248,7 @@ function App() {
         m.nameEN.toLowerCase().includes(name.toLowerCase())
     })
     if (movieResultSave.length === 0 && name) {
-      setMessageErrorSearchSave(Text_Error.Search);
+      setMessageErrorSearchSave(Text_Error.SearchSave);
       setMoviesSave([]);
     } else {
       setMoviesSave(movieResultSave);
@@ -295,11 +294,11 @@ function App() {
         <Routes>
           <Route path="/sign-up" element={
             loggedIn ? <CheckRoute/> :
-            <Register handleRegister={handleRegister} message={messageErrorRegister}/>
+              <Register handleRegister={handleRegister} message={messageErrorRegister}/>
           }/>
           <Route path="/sign-in" element={
             loggedIn ? <CheckRoute/> :
-            <Login handleLogin={handleLogin} message={messageErrorLogin}/>
+              <Login handleLogin={handleLogin} message={messageErrorLogin}/>
           }/>
           <Route path="/" element={
             <Main loggedIn={loggedIn}/>

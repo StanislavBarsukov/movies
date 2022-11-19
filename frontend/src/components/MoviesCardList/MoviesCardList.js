@@ -2,9 +2,11 @@ import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useLocation } from 'react-router-dom';
+import { Text_Error } from '../../utils/const/const';
 
 function MoviesCardList({ moviesAll, movies, onSave, onDelete, moviesSave, message, messageSave }) {
   const location = useLocation().pathname;
+
   return (
     <section className="movies">
       { message || messageSave ? ( <span className="movies__none">{message || messageSave}</span> ) :(
@@ -22,7 +24,10 @@ function MoviesCardList({ moviesAll, movies, onSave, onDelete, moviesSave, messa
                 moviesSave={moviesSave}
               />))
           )}
-          {location === '/save-movies' && (movies.map((movie) => (
+          { location === '/save-movies' && (movies.length === 0 ? (
+            <span className="movies__none">{Text_Error.Not_Movies}</span>
+          ) : (
+            movies.map((movie) => (
               <MoviesCard
                 key={movie._id}
                 movie={movie}
@@ -33,7 +38,7 @@ function MoviesCardList({ moviesAll, movies, onSave, onDelete, moviesSave, messa
                 onDelete={onDelete}
                 moviesSave={moviesSave}
               />))
-          )}
+          ))}
         </ul>
       )}
     </section>
